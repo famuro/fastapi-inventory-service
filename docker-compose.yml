@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    image: inventory-img
+    container_name: inventory_service
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+
+  redis:
+    image: redis/redis-stack:edge
+    container_name: inventory_db
+    restart: always
+    ports:
+      - "6379:6379"
+      - "8001:8001"   # expose Redis Insight at port 8001
+
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
